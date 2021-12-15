@@ -1,8 +1,19 @@
 import Controls from "../common/control";
 
 class GameOverPage extends Controls {
-    constructor(parentNode: HTMLElement) {
-        super(parentNode)
+    backHome: () => void;
+    onNext: ()=> void;
+
+    constructor(parentNode: HTMLElement, results: any) {
+        super(parentNode);
+        const buttonHome = new Controls(this.node, "button", "settings__button-home", "Home");
+        buttonHome.node.onclick = () => {
+            this.backHome();
+        }
+        const nextQuiz = new Controls(this.node, "button", "button__next", "Next");
+        nextQuiz.node.onclick = () => {
+            this.onNext();
+        }
     }
 }
 export default GameOverPage;
