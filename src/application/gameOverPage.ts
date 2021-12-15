@@ -14,6 +14,8 @@ class GameOverPage extends Controls {
         nextQuiz.node.onclick = () => {
             this.onNext();
         }
+        const resultsIndicator = new Controls(this.node, "div", "question", "");
+        resultsIndicator.node.textContent = results.map((item: boolean) => item=== true? "+": "-").join(" ");
     }
 }
 export default GameOverPage;
