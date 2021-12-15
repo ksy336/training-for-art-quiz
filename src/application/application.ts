@@ -5,11 +5,21 @@ import CategoriesPage from "./categoriesPage";
 import "./../styles.css";
 import GameFieldPage from "./gameFieldPage";
 import GameOverPage from "./gameOverPage";
+import QuizDataModel from "./QuizDataModel";
 
 class Application extends Controls {
+     model: QuizDataModel;
+
     constructor(parentNode: HTMLElement) {
         super(parentNode);
-        this.mainCycle();
+        const preloader = new Controls(this.node, "div", "", "Loading...");
+        this.model = new QuizDataModel();
+        this.model.build().then(result => {
+            preloader.destroy();
+            console.log(result.data);
+            this.mainCycle();
+        })
+
     }
 
     private gameCycle(gameName: string, categoryIndex: number) {
