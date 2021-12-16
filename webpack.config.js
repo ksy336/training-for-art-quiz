@@ -27,10 +27,10 @@ const config = {
         }),
         new CopyPlugin({
             patterns: [
-              { from: "./src/assets/img", to: "./public/img" },
-              { from: "./src/assets/sound", to: "./public/sound" },
+                { from: "./src/assets/img", to: "./public/img" },
+                { from: "./src/assets/sound", to: "./public/sound" },
             ],
-          }),
+        }),
 
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -67,10 +67,10 @@ const config = {
 module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
-        
+
         config.plugins.push(new MiniCssExtractPlugin());
-        
-        
+
+
     } else {
         config.mode = 'development';
     }

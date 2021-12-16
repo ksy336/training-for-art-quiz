@@ -1,4 +1,4 @@
-import Controls from "../common/control";
+import Control from "../common/control";
 import StartPage from "./startPage";
 import SettingsPage from "./Settings";
 import CategoriesPage from "./categoriesPage";
@@ -7,12 +7,12 @@ import GameFieldPage from "./gameFieldPage";
 import GameOverPage from "./gameOverPage";
 import QuizDataModel from "./QuizDataModel";
 
-class Application extends Controls {
+class Application extends Control {
      model: QuizDataModel;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
-        const preloader = new Controls(this.node, "div", "", "Loading...");
+        const preloader = new Control(this.node, "div", "", "Loading...");
         this.model = new QuizDataModel();
         this.model.build().then(result => {
             preloader.destroy();
@@ -23,7 +23,7 @@ class Application extends Controls {
     }
 
     private gameCycle(gameName: string, categoryIndex: number) {
-        const gameFieldPage = new GameFieldPage(this.node,{gameName: gameName, categoryIndex: categoryIndex});
+        const gameFieldPage = new GameFieldPage(this.node,{gameName: gameName, categoryIndex: categoryIndex}, this.model.getPicturesQuestions(categoryIndex));
         gameFieldPage.backHome = () => {
             gameFieldPage.destroy();
             this.mainCycle();
@@ -47,7 +47,7 @@ class Application extends Controls {
         }
     }
     private categoryCycle(gameName: string) {
-        const categoriesPage = new CategoriesPage(this.node, gameName);
+        const categoriesPage = new CategoriesPage(this.node, gameName, this.model.getCategoriesData());
         categoriesPage.backHome = () => {
             categoriesPage.destroy();
             this.mainCycle();

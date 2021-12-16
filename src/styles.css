@@ -128,9 +128,12 @@ button:hover,
 /*    right: 650px;*/
 /*}*/
 
-/*.settings__button-home {*/
-/*    display: none;*/
-/*}*/
+.header.settings__button-home {
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+}
 
 
 @media screen and (max-width: 1054px) {

@@ -1,20 +1,21 @@
-import Controls from "../common/control";
+import Control from "../common/control";
+import './../styles.css';
 
-class GameOverPage extends Controls {
+class GameOverPage extends Control {
     backHome: () => void;
     onNext: ()=> void;
 
     constructor(parentNode: HTMLElement, results: any) {
         super(parentNode);
-        const buttonHome = new Controls(this.node, "button", "settings__button-home", "Home");
+        const buttonHome = new Control(this.node, "button", "settings__button-home", "Home");
         buttonHome.node.onclick = () => {
             this.backHome();
         }
-        const nextQuiz = new Controls(this.node, "button", "button__next", "Next");
+        const nextQuiz = new Control(this.node, "button", "button__next", "Next");
         nextQuiz.node.onclick = () => {
             this.onNext();
         }
-        const resultsIndicator = new Controls(this.node, "div", "question", "");
+        const resultsIndicator = new Control(this.node, "div", "question", "");
         resultsIndicator.node.textContent = results.map((item: boolean) => item=== true? "+": "-").join(" ");
     }
 }

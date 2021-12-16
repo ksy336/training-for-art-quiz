@@ -1,7 +1,9 @@
-import Controls from "../common/control";
+import Control from "../common/control";
 import ArtistsQuestions from "./artists-questions";
-import {IArtistQuestionData} from "./IArtistQuestionData";
+// import {IArtistQuestionData} from "./IArtistQuestionData";
 import PicturesQuestions from "./pictures-questions";
+import {IPicturesQuestionData, IArtistsQuestionData} from "./QuizDataModel";
+import './../styles.css';
 
 interface IQuizOptions {
     gameName: string;
@@ -10,36 +12,36 @@ interface IQuizOptions {
 
 type IQuizResults = Array<boolean>;
 
-class GameFieldPage extends Controls {
+class GameFieldPage extends Control {
     gameOptions: IQuizOptions;
     backHome: ()=> void;
     backToCateg: () => void;
     onFinish: (results: IQuizResults) => void;
-    progressIndicator: Controls<HTMLElement>;
+    progressIndicator: Control<HTMLElement>;
     results: IQuizResults;
-    answersIndicator: Controls<HTMLElement>;
+    answersIndicator: Control<HTMLElement>;
 
-    constructor(parentNode: HTMLElement, gameOptions: IQuizOptions) {
+    constructor(parentNode:HTMLElement, gameOptions: IQuizOptions, questionData:Array<IArtistsQuestionData| IPicturesQuestionData>){
         super(parentNode);
-       this.gameOptions = gameOptions;
         console.log(gameOptions);
+        this.gameOptions = gameOptions;
+        const header = new Control(this.node, 'h1', '', `${gameOptions.gameName} - ${gameOptions.categoryIndex}`);
 
-        const header = new Controls(this.node, "header", "header", `${gameOptions.gameName} - ${gameOptions.categoryIndex}`);
-        const buttonHome = new Controls(this.node, "button", "settings__button-home", "Home");
+        const buttonHome = new Control(this.node, "button", "settings__button-home", "Home");
         buttonHome.node.onclick = () => {
             this.backHome();
         }
-        const backToCategories = new Controls(this.node, "button", "button__categ", "Categories");
+        const backToCategories = new Control(this.node, "button", "button__categ", "Categories");
         backToCategories.node.onclick = () => {
             this.backToCateg();
         }
 
-        this.progressIndicator = new Controls(this.node, "div", "question", "");
-        this.answersIndicator = new Controls(this.node, "div", "question", "");
+        this.progressIndicator = new Control(this.node, "div", "question", "");
+        this.answersIndicator = new Control(this.node, "div", "question", "");
 
-        const questions: Array<IArtistQuestionData> = [{answers:[1, 2, 3, 4], correctAnswersIndex:2}, {answers:[1, 2, 3, 4], correctAnswersIndex: 0}, {answers:[1, 2, 3, 4], correctAnswersIndex: 3}];
+        //const questions: Array<IArtistQuestionData> = [{answers:[1, 2, 3, 4], correctAnswersIndex:2}, {answers:[1, 2, 3, 4], correctAnswersIndex: 0}, {answers:[1, 2, 3, 4], correctAnswersIndex: 3}];
         this.results = [];
-        this.questionCycle(gameOptions.gameName, questions, 0, () => {
+        this.questionCycle(gameOptions.gameName, questionData, 0, () => {
             this.onFinish(this.results);
         })
 
@@ -48,7 +50,7 @@ class GameFieldPage extends Controls {
         //     this.onFinish({});
         // }
     }
-    questionCycle(gameName: string, questions: Array<IArtistQuestionData>, index: number, onFinish: ()=> void) {
+    questionCycle(gameName: string, questions: Array<any>, index: number, onFinish: ()=> void) {
         if(index >= questions.length) {
             onFinish();
             return;

@@ -1,17 +1,21 @@
-import Controls from "../common/control";
-import {IArtistQuestionData} from "./IArtistQuestionData";
+import Control from "../common/control";
+import { IArtistsQuestionData, IPicturesQuestionData } from "./quizDataModel";
+import './../styles.css';
 
+export class ArtistsQuestions extends Control {
+    onAnswer: (index:number)=>void;
 
-class ArtistsQuestions extends Controls {
-    onAnswer: (index: number)=> void;
-
-    constructor(parentNode: HTMLElement, questionData: IArtistQuestionData) {
+    constructor(parentNode: HTMLElement, questionData: IArtistsQuestionData) {
         super(parentNode);
-        const question = new Controls(this.node, "div", "question", "Кто автор данной картины");
-        const answerButton = questionData.answers.map((item, index) => {
-            const button = new Controls(this.node, "button", "", index.toString());
+
+        const question = new Control(this.node, 'div', 'question', 'Кто автор данной картины');
+        const img = new Image(200, 200);
+        img.src = questionData.artistImageUrl;
+        question.node.append(img);
+        const answerButtons = questionData.answers.map((it, i) => {
+            const button = new Control(this.node, 'button', '', it.toString());
             button.node.onclick = () => {
-                this.onAnswer(index);
+                this.onAnswer(i);
             }
         })
     }
