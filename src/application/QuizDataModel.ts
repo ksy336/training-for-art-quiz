@@ -70,7 +70,7 @@ class QuizDataModel {
         return categories;
     }
 
-    // Будем тут хранить инфо об 10 вопросов о картинах
+    // Игровой цикл
 
     public getPicturesQuestions(categoryIndex: number) {
         const questionPerCategory = this.questionPerCategory;
@@ -107,13 +107,13 @@ class QuizDataModel {
             const answers: Array<string> = [];
             const answersCount = 4;
             const correctAnswerIndex = Math.floor(Math.random() * answersCount);
-            const correctAnswer = this.data[i].author.en;
+            const correctAnswer = this.data[i].author.ru;
             for(let j=0; j<answersCount; j++){
                 if (correctAnswerIndex == j){
                     answers.push(correctAnswer)
                 } else {
                     const randomName = this.data[Math.floor(Math.random()*this.data.length)].author;
-                    answers.push(randomName.en);
+                    answers.push(randomName.ru);
                 }
             }
             const question: IArtistsQuestionData = {

@@ -1,18 +1,23 @@
 import Control from "../common/control";
 import StartPage from "./startPage";
-import SettingsPage from "./Settings";
+import SettingsPage, {SettingsModel} from "./Settings";
 import CategoriesPage from "./categoriesPage";
 import "./../styles.css";
 import GameFieldPage from "./gameFieldPage";
 import GameOverPage from "./gameOverPage";
 import QuizDataModel from "./QuizDataModel";
+import {SoundManager} from "./soundManager";
 
 class Application extends Control {
      model: QuizDataModel;
+     settingsModel: SettingsModel;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
         const preloader = new Control(this.node, "div", "", "Loading...");
+        SoundManager.preload();
+        this.settingsModel = new SettingsModel();
+        this.settingsModel.loadFromLocalStorage();
         this.model = new QuizDataModel();
         this.model.build().then(result => {
             preloader.destroy();
@@ -23,7 +28,15 @@ class Application extends Control {
     }
 
     private gameCycle(gameName: string, categoryIndex: number) {
-        const gameFieldPage = new GameFieldPage(this.node,{gameName: gameName, categoryIndex: categoryIndex}, this.model.getPicturesQuestions(categoryIndex));
+        let questions: Array<any> = [];
+        if(gameName === "artists") {
+            questions = this.model.getArtistsQuestions(categoryIndex);
+        } else if(gameName === "pictures") {
+            questions = this.model.getPicturesQuestions(categoryIndex);
+        } else {
+            throw new Error("gameName does not exist");
+        }
+        const gameFieldPage = new GameFieldPage(this.node,{gameName: gameName, categoryIndex: categoryIndex, settings: this.settingsModel.getData()}, questions);
         gameFieldPage.backHome = () => {
             gameFieldPage.destroy();
             this.mainCycle();
@@ -66,7 +79,7 @@ class Application extends Control {
         }
         startPage.onSettings = () => {
             startPage.destroy();
-            const settingsPage = new SettingsPage(this.node);
+            const settingsPage = new SettingsPage(this.node, this.settingsModel.getData());
             settingsPage.backHome = () => {
                 settingsPage.destroy();
                 this.mainCycle();
@@ -74,6 +87,7 @@ class Application extends Control {
             settingsPage.onSave = (settings) => {
                 console.log(settings);
                 settingsPage.destroy();
+                this.settingsModel.setData(settings);
                 this.mainCycle();
             }
         }
